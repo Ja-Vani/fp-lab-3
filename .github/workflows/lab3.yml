@@ -1,0 +1,30 @@
+name: Lab3
+
+on: push
+
+env:
+  ERL_AFLAGS: "-enable-feature all"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: erlef/setup-beam@v1
+        with:
+          otp-version: '26'
+          rebar3-version: '3.22.1'
+      - name: Format
+        run: rebar3 format
+        working-directory: ${{github.workspace}}
+
+      - name: Lint
+        run: rebar3 lint
+        working-directory: ${{github.workspace}}
+
+      - name: Compile
+        working-directory: ${{github.workspace}}
+        run: rebar3 compile
+
+      - name: Run tests
+        run: rebar3 eunit -v
+        working-directory: ${{github.workspace}}

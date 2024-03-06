@@ -5,16 +5,23 @@
 % Обработка точки
 parse_point(Line) ->
     [case string:to_float(Num) of
-        {error, no_float} -> list_to_integer(Num);
-        {Float, _} -> Float
-    end || Num <- string:tokens(string:trim(Line), " ")].
+         {error, no_float} ->
+             list_to_integer(Num);
+         {Float, _} ->
+             Float
+     end
+     || Num
+            <- string:tokens(
+                   string:trim(Line), " ")].
 
 % Вывод чисел
 print_number(Nums) ->
-    Message = [lists:join("\t",
-                       lists:map(fun(N) -> erlang:float_to_list(float(N), [{decimals, 2}]) end,
-                       Nums))],
-    io:format("~s~n", Message).
+    Message =
+        [lists:join("\t",
+                    lists:map(fun(N) -> erlang:float_to_list(float(N), [{decimals, 2}]) end,
+                              Nums))],
+    %io:format("~s~n", Message),
+    Message.
 
 % Цикл ввода
 loop_input(Workers, Dev) ->
@@ -30,7 +37,8 @@ loop_input(Workers, Dev) ->
 loop_output() ->
     receive
         {result, {Name, [X, Y]}, _} ->
-            io:format(Name ++ "~n"),
+            %io:format(Name ++ "~n"),
+            Name,
             print_number(X),
             print_number(Y);
         Msg ->
@@ -39,7 +47,7 @@ loop_output() ->
     loop_output().
 
 start_input(Workers, IOType) ->
-    case IOType of 
+    case IOType of
         "stdio" ->
             loop_input(Workers, standard_io);
         Filename ->
