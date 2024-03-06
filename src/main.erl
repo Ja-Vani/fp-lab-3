@@ -13,19 +13,13 @@ main(Args) ->
                      AtomMethod = list_to_atom(Method),
                      case AtomMethod of
                          linear ->
-                             PID = spawn(math_methods,
-                                         loop_linear,
-                                         [StepVal, queue:from_list([]), OutputPid]),
-                             link(PID),
-                             PID;
+                             spawn(math_methods,
+                                   loop_linear,
+                                   [StepVal, queue:from_list([]), OutputPid]);
                          lagrange ->
-                             PID = spawn(math_methods, loop_lagrange, LagrangeMass),
-                             link(PID),
-                             PID;
+                             spawn(math_methods, loop_lagrange, LagrangeMass);
                          newton ->
-                             PID = spawn(math_methods, loop_newton, LagrangeMass),
-                             link(PID),
-                             PID;
+                             spawn(math_methods, loop_newton, LagrangeMass);
                          _ ->
                              AtomMethod
                      end
