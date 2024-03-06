@@ -3,10 +3,9 @@
 -export([main/1]).
 
 main(Args) ->
-    IOType = lists:nth(1, Args),
-    WindowVal = list_to_integer(lists:nth(2, Args)),
-    StepVal = list_to_float(lists:nth(3, Args)),
-    [_, _, _ | Methods] = Args,
+    [IOType, Window, Step | Methods] = Args,
+    WindowVal = list_to_integer(Window),
+    StepVal = list_to_float(Step),
     OutputPid = spawn(io_methods, start_output, []),
     LagrangeMass = [StepVal, WindowVal, queue:from_list([]), OutputPid],
     Workers =
